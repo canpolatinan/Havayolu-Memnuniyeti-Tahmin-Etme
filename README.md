@@ -1,21 +1,32 @@
-# ✈️ Airline Passenger Satisfaction Prediction (Kaggle)
+# ✈️ Havayolu Yolcu Memnuniyeti Tahmini
 
-Bu proje, Kaggle üzerindeki **Airline Passenger Satisfaction** (Havayolu Yolcu Memnuniyeti) yarışması için geliştirilmiş uçtan uca bir Makine Öğrenmesi (Machine Learning) çözümüdür.
+Kaggle Playground Series S6E10 için ikili sınıflandırma çalışması
+([yarışma](https://www.kaggle.com/competitions/playground-series-s6e10) ·
+[Kaggle notebook'u]([BURAYA_NOTEBOOK_LINK](https://www.kaggle.com/code/inancanpolat/havayolu-memnuniyeti-tahmin-etme)I)).
 
-## 🚀 Proje Özeti ve Hedefi
-Müşteri memnuniyetini etkileyen faktörleri analiz etmek ve yolcuların memnuniyet durumunu (satisfied / neutral or dissatisfied) yüksek doğrulukla tahmin etmek amacıyla geliştirilmiştir. En iyi performansı elde etmek için birden fazla gelişmiş gradient boosting modeli harmanlanmıştır (Ensemble).
+## Problem
+Yolcunun memnun olup olmadığını tahmin etmek. Metrik: ROC AUC.
+Veri: ~700 bin eğitim, ~300 bin test satırı (veri repo'da yok, yarışma sayfasından indirilir).
 
-## 🛠️ Kullanılan Teknolojiler ve Yöntemler
-* **Dil:** Python 3.x
-* **Kütüphaneler:** Pandas, NumPy, Scikit-Learn, LightGBM, XGBoost, CatBoost
-* **Doğrulama Stratejisi:** 5-Fold Cross-Validation (Çapraz Doğrulama)
-* **Model Mimarisi (Ensemble):** LightGBM, XGBoost ve CatBoost modellerinin olasılık tahminlerinin ortalaması (Rank/Probability Blending)
+## Yaklaşım
+- Servis puanlarından 13 ek özellik (ortalama, toplam, min/max/std, gecikme farkı vb.)
+- LightGBM, XGBoost, CatBoost; 5 katlı StratifiedKFold
+- Üç modelin sıra (rank) ortalaması ile ensemble
+- Eksik değerler (`Arrival Delay in Minutes`) modellerin kendi mekanizmasıyla işlendi
 
-## 📊 Model Performansı
-* **Bireysel Model Skorları:** ~0.958 - 0.959 AUC aralığı
-* **Ensemble (Birleşik) Skor:** **0.95828+ Public AUC** skoru elde edilmiştir.
+## Sonuçlar
+| Model | CV AUC |
+|---|---|
+| LightGBM (baseline, ek özelliksiz) | 0.95879 |
+| LightGBM (13 ek özellikle) | 0.95866 |
+| XGBoost | 0.95856 |
+| CatBoost | 0.95847 |
+| Rank ensemble | 0.95885 |
 
-## ⚙️ Kod Yapısı ve Adımlar
-1. **Veri Ön İşleme ve Özellik Mühendisliği (Feature Engineering):** Eksik verilerin doldurulması, kategorik değişkenlerin dönüştürülmesi ve servis puanları üzerinden türetilmiş yeni özniteliklerin (ortalama, toplam, standart sapma vb.) eklenmesi.
-2. **Model Eğitimi:** LightGBM, XGBoost ve CatBoost modellerinin 5 katlı çapraz doğrulama ile eğitilmesi.
-3. **Ensemble & Submission:** Modellerin OOF (Out-of-Fold) tahminlerinin birleştirilerek Kaggle için final `submission_ensemble.csv` dosyasının üretilmesi.
+Public AUC: 0.95828 (baseline ve ensemble için aynı).
+
+## Çıkarımlar
+- Ek özellikler CV'yi iyileştirmedi: ağaç tabanlı modeller bu veride servis puanlarının
+  basit birleşimlerini zaten öğreniyor.
+- Ensemble tek modele göre CV'de yalnızca ~0.0002 kazandırdı, public skoru değiştirmedi.
+- CV ile public skorun yakın çıkması, doğrulama düzeninin güvenilir olduğunu gösteriyor.
