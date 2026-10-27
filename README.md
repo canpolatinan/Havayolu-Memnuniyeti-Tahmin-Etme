@@ -1,8 +1,7 @@
 # ✈️ Havayolu Yolcu Memnuniyeti Tahmini
 
 Kaggle Playground Series S6E10 için ikili sınıflandırma çalışması
-([yarışma](https://www.kaggle.com/competitions/playground-series-s6e10) ·
-[Kaggle notebook'u]([BURAYA_NOTEBOOK_LINK](https://www.kaggle.com/code/inancanpolat/havayolu-memnuniyeti-tahmin-etme)I)).
+https://www.kaggle.com/code/inancanpolat/havayolu-memnuniyeti-tahmin-etme
 
 ## Problem
 Yolcunun memnun olup olmadığını tahmin etmek. Metrik: ROC AUC.
@@ -24,6 +23,9 @@ Veri: ~700 bin eğitim, ~300 bin test satırı (veri repo'da yok, yarışma sayf
 | Rank ensemble | 0.95885 |
 
 Public AUC: 0.95828 (baseline ve ensemble için aynı).
+
+
+
 
 ## Çıkarımlar
 - Ek özellikler CV'yi iyileştirmedi: ağaç tabanlı modeller bu veride servis puanlarının
